@@ -40,9 +40,13 @@ function VideoPlayer({ url }: { url: string }) {
             <div
               className=" mx-8 flex h-full w-full self-center "
               onClick={(e) => {
-                const localX = e.clientX - e.target.offsetLeft;
-                const localY = e.clientY - e.target.offsetTop;
-                console.log(localX / e.target.clientWidth);
+                const localX =
+                  e.clientX - (e.target as HTMLInputElement).offsetLeft;
+                const localY =
+                  e.clientY - (e.target as HTMLInputElement).offsetTop;
+                console.log(
+                  localX / (e.target as HTMLInputElement).clientWidth
+                );
                 console.log(localX, localY);
               }}
             >
