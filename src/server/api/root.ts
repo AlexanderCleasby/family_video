@@ -9,7 +9,7 @@ import { tapeRouter } from "~/server/api/routers/tape";
  */
 export const appRouter = createTRPCRouter({
   example: exampleRouter,
-  tapes: tapeRouter,
+  tape: tapeRouter,
 });
 
 // export type definition of API

@@ -51,6 +51,11 @@ model User {
     sessions      Session[]
 }
 
+model AllowedEmail {
+    id    String @id @default(cuid())
+    email String @unique
+}
+
 model VerificationToken {
     identifier String
     token      String   @unique
@@ -60,29 +65,29 @@ model VerificationToken {
 }
 
 model Tape {
-    id        String    @id @default(cuid())
-    key       String    @unique
-    name      String
-    length    Int
-    tags      TagsOnTapes[]
+    id     String        @id @default(cuid())
+    key    String        @unique
+    name   String
+    length Int
+    tags   TagsOnTapes[]
 }
 
 model Tag {
-    id        String    @id @default(cuid())
-    target    Target
-    tapes     TagsOnTapes[]
+    id     String        @id @default(cuid())
+    target Target
+    tapes  TagsOnTapes[]
 }
 
 model TagsOnTapes {
-    tapeId    String
-    tape      Tape      @relation(fields: [tapeId], references: [id], onDelete: Cascade)
-    tagId     String
-    tag       Tag       @relation(fields: [tagId], references: [id], onDelete: Cascade)
+    tapeId String
+    tape   Tape   @relation(fields: [tapeId], references: [id], onDelete: Cascade)
+    tagId  String
+    tag    Tag    @relation(fields: [tagId], references: [id], onDelete: Cascade)
 
     @@id([tapeId, tagId])
 }
 
 enum Target {
-  TAPE
-  SECTION
+    TAPE
+    SECTION
 }

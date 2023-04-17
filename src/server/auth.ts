@@ -5,6 +5,9 @@ import {
   type DefaultSession,
 } from "next-auth";
 import DiscordProvider from "next-auth/providers/discord";
+import GoogleProvider from "next-auth/providers/google";
+import CredentialsProvider from "next-auth/providers/credentials";
+import EmailProvider from "next-auth/providers/email";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import { env } from "~/env.mjs";
 import { prisma } from "~/server/db";
@@ -37,6 +40,20 @@ declare module "next-auth" {
  */
 export const authOptions: NextAuthOptions = {
   callbacks: {
+    // eslint-disable-next-line @typescript-eslint/require-await
+    async signIn({ account, profile }) {
+      console.log("signIn", account, profile);
+      //debugger;
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
+      const allowedEmail = await prisma.allowedEmail.findUnique({
+        where: { email: profile?.email },
+      });
+
+      if (allowedEmail) {
+        return true;
+      }
+      return false;
+    },
     session({ session, user }) {
       if (session.user) {
         session.user.id = user.id;
@@ -45,12 +62,18 @@ export const authOptions: NextAuthOptions = {
       return session;
     },
   },
+
   adapter: PrismaAdapter(prisma),
   providers: [
     DiscordProvider({
       clientId: env.DISCORD_CLIENT_ID,
       clientSecret: env.DISCORD_CLIENT_SECRET,
     }),
+    GoogleProvider({
+      clientId: env.GOOGLE_CLIENT_ID,
+      clientSecret: env.GOOGLE_CLIENT_SECRET,
+    }),
+
     /**
      * ...add more providers here.
      *

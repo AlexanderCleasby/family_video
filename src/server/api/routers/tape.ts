@@ -5,6 +5,7 @@ import {
   publicProcedure,
   protectedProcedure,
 } from "~/server/api/trpc";
+import getFileUrl from "~/server/getFileUrl";
 
 export const tapeRouter = createTRPCRouter({
   hello: publicProcedure
@@ -16,8 +17,17 @@ export const tapeRouter = createTRPCRouter({
       };
     }),
 
-  getAll: publicProcedure.query(({ ctx }) => {
-    return ctx.prisma.tape.findMany();
+  getAll: protectedProcedure.query(async ({ ctx }) => {
+    const ormTapes = await ctx.prisma.tape.findMany();
+
+    const res = await Promise.all(
+      ormTapes.map(async (tape) => ({
+        ...tape,
+        url: await getFileUrl(tape.key),
+      }))
+    );
+
+    return res;
   }),
 
   getSecretMessage: protectedProcedure.query(() => {
