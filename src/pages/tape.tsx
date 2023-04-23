@@ -28,27 +28,28 @@ const TapeIndex: NextPage = () => {
           </button>
         )}
         {showSidebar && (
-          <ul className=" fixed left-0 z-40 bg-gray-700 px-4 py-3 font-semibold text-white no-underline transition hover:bg-gray-600">
-            <li>
-              <button onClick={() => changeShowSidebar(!showSidebar)}>
-                <X />
-              </button>
-            </li>
-            {tapeList?.map((tape) => {
-              return (
-                <li
-                  key={tape.name}
-                  onClick={() => {
-                    changeCurrentTapeId(tape.id);
-                    changeShowSidebar(false);
-                  }}
-                  className="cursor-pointer"
-                >
-                  {tape.name}
-                </li>
-              );
-            })}
-          </ul>
+          <div className="fixed left-0 z-40 bg-gray-700 px-4 py-3 font-semibold text-white no-underline transition hover:bg-gray-600">
+            <button onClick={() => changeShowSidebar(!showSidebar)}>
+              <X />
+            </button>
+
+            <ul className="max-h-96 overflow-y-scroll">
+              {tapeList?.map((tape) => {
+                return (
+                  <li
+                    key={tape.name}
+                    onClick={() => {
+                      changeCurrentTapeId(tape.id);
+                      changeShowSidebar(false);
+                    }}
+                    className="cursor-pointer"
+                  >
+                    {tape.name}
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
         )}
       </div>
 
