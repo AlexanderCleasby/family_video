@@ -1,5 +1,5 @@
 import { z } from "zod";
-
+import { env } from "~/env.mjs";
 import {
   createTRPCRouter,
   publicProcedure,
@@ -16,8 +16,8 @@ export const exampleRouter = createTRPCRouter({
       };
     }),
 
-  getAll: publicProcedure.query(({ ctx }) => {
-    return ctx.prisma.tape.findMany();
+  familyName: publicProcedure.query(() => {
+    return env.FAMILY_NAME;
   }),
 
   getSecretMessage: protectedProcedure.query(() => {

@@ -75,6 +75,8 @@ model Tape {
 
 model Tag {
     id     String        @id @default(cuid())
+    name   String        @unique
+    desc   String?
     target Target
     tapes  TagsOnTapes[]
 }

@@ -27,6 +27,7 @@ const server = z.object({
   FILE_STORAGE_SOURCE: z.enum(["S3"]),
   S3_BUCKET: z.string().optional(),
   APPROVED_EMAILS: z.string(),
+  FAMILY_NAME: z.string().optional(),
 });
 
 /**
@@ -56,6 +57,7 @@ const processEnv = {
   FILE_STORAGE_SOURCE: process.env.FILE_STORAGE_SOURCE,
   S3_BUCKET: process.env.S3_BUCKET,
   APPROVED_EMAILS: process.env.APPROVED_EMAILS,
+  FAMILY_NAME: process.env.FAMILY_NAME,
   // NEXT_PUBLIC_CLIENTVAR: process.env.NEXT_PUBLIC_CLIENTVAR,
 };
 
