@@ -47,20 +47,28 @@ const useVideoPlayer = (videoElement: RefObject<HTMLVideoElement>) => {
     });
   };
 
+  const handleGoToTime = (time: number) => {
+    if (!videoElement.current) throw new Error("Video element not defined");
+    videoElement.current.currentTime = time;
+  };
+
   const handleVideoMetadataLoaded = (
     event: SyntheticEvent<HTMLVideoElement, Event>
   ) => {
     console.log(event);
   };
 
-  //const handleVideoSpeed = (event: any) => {
-  //  const speed = Number(event.target.value);
-  //  videoElement.current.playbackRate = speed;
-  //  setPlayerState({
-  //    ...playerState,
-  //    speed,
-  //  });
-  //};
+  const captureVideoFrame = () => {
+    if (!videoElement.current) return;
+    const canvas = document.createElement("canvas");
+    canvas.width = videoElement.current.videoWidth;
+    canvas.height = videoElement.current.videoHeight;
+    canvas.getContext("2d")?.drawImage(videoElement.current, 0, 0);
+    const dataUri = canvas.toDataURL("image/png");
+    const data = dataUri.split(",")[1];
+    if (!data) return;
+    return Buffer.from(data, "base64");
+  };
 
   const toggleMute = () => {
     setPlayerState({
@@ -82,6 +90,8 @@ const useVideoPlayer = (videoElement: RefObject<HTMLVideoElement>) => {
     handleOnTimeUpdate,
     handleVideoProgress,
     handleVideoMetadataLoaded,
+    captureVideoFrame,
+    handleGoToTime,
     //handleVideoSpeed,
     toggleMute,
   };

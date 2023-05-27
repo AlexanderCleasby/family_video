@@ -1,6 +1,9 @@
+/* eslint-disable @next/next/no-img-element */
 import { useState, useRef } from "react";
-import { Play, Pause } from "react-feather";
+import { Play, Pause, Plus } from "react-feather";
+import Events from "./Events";
 import useVideoPlayer from "~/hooks/usevideoPlayer";
+import { api } from "~/utils/api";
 
 function VideoPlayer({
   id,
@@ -12,6 +15,7 @@ function VideoPlayer({
   name: string;
 }) {
   const [showControles, setShowControles] = useState(false);
+
   const videoElement = useRef<HTMLVideoElement>(null);
   const {
     playerState: { isPlaying, progress, playahead },
@@ -19,23 +23,27 @@ function VideoPlayer({
     handleOnTimeUpdate,
     handleVideoMetadataLoaded,
     handleVideoProgress,
+    handleGoToTime,
+    captureVideoFrame,
   } = useVideoPlayer(videoElement);
   const ButtonClass = !isPlaying ? Play : Pause;
 
   return (
-    <>
+    <div className="max-w-screen-md">
       <h3>{name}</h3>
       <div
-        className="relative inline-block"
+        className="relative inline-block "
         onMouseEnter={() => setShowControles(true)}
         onMouseLeave={() => setShowControles(false)}
       >
         <video
+          id="video-player"
           preload="auto"
           src={url}
           ref={videoElement}
           onTimeUpdate={handleOnTimeUpdate}
           onLoadedMetadata={handleVideoMetadataLoaded}
+          crossOrigin="anonymous"
         />
         <div
           className={`${
@@ -75,7 +83,8 @@ function VideoPlayer({
           </div>
         </div>
       </div>
-      <div>
+
+      <div className="max-w-screen-md">
         <div>
           <button onClick={togglePlay}>{isPlaying ? "Pause" : "Play"}</button>
         </div>
@@ -83,8 +92,15 @@ function VideoPlayer({
           CurrentTime: {Math.round(playahead / 60)}:
           {(playahead % 60).toString().padStart(2, "0")}
         </p>
+
+        <Events
+          id={id}
+          captureVideoFrame={captureVideoFrame}
+          playahead={playahead}
+          handleGoToTime={handleGoToTime}
+        />
       </div>
-    </>
+    </div>
   );
 }
 

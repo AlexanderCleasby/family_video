@@ -43,7 +43,7 @@ export const authOptions: NextAuthOptions = {
     // eslint-disable-next-line @typescript-eslint/require-await
     async signIn({ account, profile }) {
       console.log("signIn", account?.provider, profile);
-      //debugger;
+
       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
       const allowedEmail = await prisma.allowedEmail.findUnique({
         where: { email: profile?.email },

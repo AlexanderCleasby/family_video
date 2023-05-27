@@ -82,15 +82,23 @@ model Tag {
 }
 
 model TagsOnTapes {
+    id     String @id @default(cuid())
     tapeId String
     tape   Tape   @relation(fields: [tapeId], references: [id], onDelete: Cascade)
     tagId  String
     tag    Tag    @relation(fields: [tagId], references: [id], onDelete: Cascade)
+    time   Int
 
-    @@id([tapeId, tagId])
+    @@index([tapeId], name: "tape_index")
+    @@index([tagId], name: "tag_index")
 }
 
 enum Target {
     TAPE
     SECTION
+}
+
+enum TagType {
+    EVENT
+    YEAR
 }
